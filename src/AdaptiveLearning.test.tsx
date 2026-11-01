@@ -36,6 +36,30 @@ describe('adaptive learning', () => {
     expect(screen.getByRole('link', { name: 'Следующий модуль' }).getAttribute('href')).toBe('/items/lecture-2')
   })
 
+  it('explains a failed attempt with the gap, weakest indicator and topics to review', () => {
+    mount(<AdaptiveResultCard result={{ ...result, recommendation: { status: 'repeat', action: 'repeat_module', level: 'repeat', gap: -29,
+      weakest_indicator: 'competency', weak_topic_limit: .6, weak_topics: [{ competency: 'визуализация', title: 'Визуализация', score: 0, correct: 0, total: 2 }] } }}/>)
+    expect(screen.getByRole('heading', { name: 'Почему такой результат' })).toBeTruthy()
+    expect(screen.getByText('До порога не хватило 29 п.')).toBeTruthy()
+    expect(screen.getByText(/Слабее всего/).textContent).toBe('Слабее всего: Компетенции')
+    expect(screen.getByRole('listitem').textContent).toBe('Визуализация: 0% (0/2)')
+    expect(screen.getByText(/Начните модуль заново/)).toBeTruthy()
+  })
+
+  it('keeps older attempts without a recommendation unchanged', () => {
+    mount(<AdaptiveResultCard result={result}/>)
+    expect(screen.queryByRole('region', { name: 'Рекомендация' })).toBeNull()
+  })
+
+  it('shows the margin above the threshold for a passed attempt', () => {
+    mount(<AdaptiveResultCard result={{ ...result, readiness: 77, module_completed: true, module_passed: true, next_item_short_id: 'lecture-2',
+      recommendation: { status: 'passed', action: 'next_module', level: 'advanced', gap: 17, weakest_indicator: 'theory', weak_topic_limit: .6, weak_topics: [] } }}/>)
+    expect(screen.getByText('Готовность выше порога на 17 п.')).toBeTruthy()
+    expect(screen.queryByText(/Слабее всего/)).toBeNull()
+    expect(screen.queryByText(/Повторите темы/)).toBeNull()
+    expect(screen.getByText(/задания повышенной сложности/)).toBeTruthy()
+  })
+
   it('keeps locked items visible without a clickable link', () => {
     mount(<LearningItemLink item={{ ...item, is_locked: true }}>Следующая практика</LearningItemLink>)
     expect(screen.getByText('Следующая практика').getAttribute('aria-disabled')).toBe('true')

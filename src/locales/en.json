@@ -1017,5 +1017,16 @@
   "необязательная проверка": "optional check",
   "Выполняется…": "Running…",
   "Запустить": "Run",
-  "Обязательные проверки не пройдены": "Required checks not passed"
+  "Обязательные проверки не пройдены": "Required checks not passed",
+  "Рекомендация": "Recommendation",
+  "Почему такой результат": "Why this result",
+  "Готовность выше порога на": "Readiness is above the threshold by",
+  "До порога не хватило": "Short of the threshold by",
+  "п.": "pts",
+  "Слабее всего": "Weakest area",
+  "Повторите темы": "Review these topics",
+  "Начните модуль заново: изучите лекции и практические с начала.": "Start the module over: study the lectures and practicals from the beginning.",
+  "Вы близко к порогу: перед новой попыткой потренируйтесь на слабых темах.": "You are close to the threshold: practise the weak topics before the next attempt.",
+  "Можно переходить к следующему модулю.": "You can move on to the next module.",
+  "Отличный результат: попробуйте задания повышенной сложности.": "Excellent result: try the advanced tasks."
 }
