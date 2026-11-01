@@ -779,3 +779,5 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .adaptive-recommendation p { margin: 0; color: inherit; }
 .adaptive-recommendation ul { margin: 0; padding-left: 20px; }
 .adaptive-recommendation .adaptive-level { font-weight: 650; }
+.adaptive-recommendation h4 { font-weight: 700; color: var(--color-text, #17223b); }
+.adaptive-recommendation ul { list-style: disc; }
