@@ -1028,5 +1028,15 @@
   "Начните модуль заново: изучите лекции и практические с начала.": "Start the module over: study the lectures and practicals from the beginning.",
   "Вы близко к порогу: перед новой попыткой потренируйтесь на слабых темах.": "You are close to the threshold: practise the weak topics before the next attempt.",
   "Можно переходить к следующему модулю.": "You can move on to the next module.",
-  "Отличный результат: попробуйте задания повышенной сложности.": "Excellent result: try the advanced tasks."
+  "Отличный результат: попробуйте задания повышенной сложности.": "Excellent result: try the advanced tasks.",
+  "Рекомендации по модулям": "Module recommendations",
+  "Последнее решение каждого студента после итогового теста модуля, за всё время.": "Each student's latest decision after the module's final test, all time.",
+  "Проверить другой порог": "Try another threshold",
+  "как в модулях": "as set in modules",
+  "Сдавали тест": "Took the test",
+  "Повтор": "Repeat",
+  "Средняя готовность": "Average readiness",
+  "Частые слабые темы": "Common weak topics",
+  "Далее при пороге": "Next at threshold",
+  "Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Пересчёт порога ничего не меняет у студентов.": "A weak topic is a competency where the student answered under 60% of questions correctly. Brackets show the number of students. Trying another threshold changes nothing for students."
 }
