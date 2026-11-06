@@ -91,3 +91,20 @@ it('shows module recommendations and recalculates them for another threshold', a
   expect(within(table).getByRole('columnheader', { name: 'Далее при пороге 50%' })).toBeTruthy()
   expect(within(row).getAllByText('75%').length).toBe(1)
 })
+
+it('saves a new module threshold', async () => {
+  const [module, ...rest] = analyticsFixture.modules
+  const report = { ...analyticsFixture, modules: [{ ...module, threshold: 60, recommendations: {
+    attempts: 1, tested_students: 1, next_students: 0, repeat_students: 1, next_rate: 0, average_readiness: 43.5,
+    readiness_values: [43.5], weak_topics: [] } }, ...rest] }
+  mockApi.mockImplementation(async (path: string) => (path.startsWith('admin/analytics') ? report : { short_id: module.short_id, adaptive_threshold: 45 }) as never)
+  render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+    <MemoryRouter><AnalyticsPage/></MemoryRouter></QueryClientProvider>)
+  const table = await screen.findByRole('table', { name: 'Рекомендации по модулям' })
+  const input = within(table).getByRole('spinbutton', { name: `Порог модуля ${module.title}` })
+  fireEvent.change(input, { target: { value: '90' } })
+  expect((within(table).getByRole('button', { name: 'Сохранить' }) as HTMLButtonElement).disabled).toBe(true)
+  fireEvent.change(input, { target: { value: '45' } })
+  fireEvent.click(within(table).getByRole('button', { name: 'Сохранить' }))
+  await waitFor(() => expect(mockApi).toHaveBeenCalledWith(`modules/${module.short_id}/threshold/`, 'PATCH', { adaptive_threshold: 45 }))
+})

@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import { api } from '../api'
+import { Notice } from '../components/ui'
 import { useI18n } from '../i18n'
 import type { AnalyticsModule } from './analytics'
 
@@ -9,6 +12,32 @@ const MAX_THRESHOLD = 80
 /** Share of students whose latest readiness reaches `threshold`, recalculated in the browser. */
 export function passingAt(values: number[], threshold: number) {
   return values.filter(value => value >= threshold).length
+}
+
+/** Lets an administrator change the real module threshold right from the statistics. */
+function ThresholdEditor({ module }: { module: AnalyticsModule }) {
+  const { t } = useI18n()
+  const qc = useQueryClient()
+  const [value, setValue] = useState(String(module.threshold ?? 60))
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const parsed = Number(value)
+  const valid = Number.isInteger(parsed) && parsed >= MIN_THRESHOLD && parsed <= MAX_THRESHOLD
+  const changed = parsed !== module.threshold
+  async function save() {
+    setBusy(true); setError('')
+    try {
+      await api(`modules/${module.short_id}/threshold/`, 'PATCH', { adaptive_threshold: parsed })
+      await qc.invalidateQueries({ queryKey: ['admin-analytics'] })
+    } catch (cause) { setError(t((cause as Error).message)) }
+    finally { setBusy(false) }
+  }
+  return <div className="analytics-threshold">
+    <label>{t('Порог')}, %<input className="input" type="number" min={MIN_THRESHOLD} max={MAX_THRESHOLD} step={1} value={value}
+      aria-label={`${t('Порог модуля')} ${module.title}`} onChange={event => setValue(event.target.value)}/></label>
+    {changed && <button type="button" className="button secondary" disabled={!valid || busy} onClick={() => void save()}>{t(busy ? 'Сохранение…' : 'Сохранить')}</button>}
+    <Notice text={error} kind="error" onDismiss={() => setError('')}/>
+  </div>
 }
 
 export function RecommendationPanel({ modules, courseTitles, number }: {
@@ -39,12 +68,12 @@ export function RecommendationPanel({ modules, courseTitles, number }: {
         <td>{number(stats.tested_students)}<small>{t('Попыток')}: {number(stats.attempts)}</small></td>
         <td>{number(stats.next_students)}<small>{number(stats.next_rate)}%</small></td>
         <td>{number(stats.repeat_students)}</td>
-        <td>{stats.average_readiness === null ? '—' : `${number(stats.average_readiness)}%`}{row.threshold !== undefined && <small>{t('Порог')} {row.threshold}%</small>}</td>
+        <td>{stats.average_readiness === null ? '—' : `${number(stats.average_readiness)}%`}{row.threshold !== undefined && <ThresholdEditor key={row.threshold} module={row}/>}</td>
         <td>{stats.weak_topics.length ? <ul className="analytics-topics">{stats.weak_topics.map(topic =>
           <li key={topic.competency}>{topic.title} <small>({number(topic.students)})</small></li>)}</ul> : '—'}</td>
         {next !== null && <td>{number(next)}<small>{number(Math.round(next / stats.tested_students * 1000) / 10)}%</small></td>}
       </tr>
     })}</tbody></table></div>
-    <p className="analytics-chart-note">{t('Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Пересчёт порога ничего не меняет у студентов.')}</p>
+    <p className="analytics-chart-note">{t('Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Ползунок только показывает расчёт, а кнопка «Сохранить» у порога меняет его для новых попыток студентов.')}</p>
   </section>
 }

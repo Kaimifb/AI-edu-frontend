@@ -1038,5 +1038,6 @@
   "Средняя готовность": "Average readiness",
   "Частые слабые темы": "Common weak topics",
   "Далее при пороге": "Next at threshold",
-  "Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Пересчёт порога ничего не меняет у студентов.": "A weak topic is a competency where the student answered under 60% of questions correctly. Brackets show the number of students. Trying another threshold changes nothing for students."
+  "Порог модуля": "Module threshold",
+  "Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Ползунок только показывает расчёт, а кнопка «Сохранить» у порога меняет его для новых попыток студентов.": "A weak topic is a competency where the student answered under 60% of questions correctly. Brackets show the number of students. The slider only previews; the Save button next to a threshold changes it for new student attempts."
 }
