@@ -1039,5 +1039,22 @@
   "Частые слабые темы": "Common weak topics",
   "Далее при пороге": "Next at threshold",
   "Порог модуля": "Module threshold",
-  "Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Ползунок только показывает расчёт, а кнопка «Сохранить» у порога меняет его для новых попыток студентов.": "A weak topic is a competency where the student answered under 60% of questions correctly. Brackets show the number of students. The slider only previews; the Save button next to a threshold changes it for new student attempts."
+  "Слабая тема — компетенция, где студент ответил верно меньше чем на 60 % вопросов. В скобках — число студентов. Ползунок только показывает расчёт, а кнопка «Сохранить» у порога меняет его для новых попыток студентов.": "A weak topic is a competency where the student answered under 60% of questions correctly. Brackets show the number of students. The slider only previews; the Save button next to a threshold changes it for new student attempts.",
+  "Профиль компетенций": "Competency profile",
+  "Пройден": "Passed",
+  "слабая тема": "a weak topic",
+  "Готовность ещё не измерена": "Readiness not measured yet",
+  "Готовность по модулям, история попыток и темы, которые стоит повторить. Модуль засчитывается, когда готовность не ниже порога.": "Readiness per module, attempt history and topics worth reviewing. A module counts as passed when readiness reaches its threshold.",
+  "Нужно повторить": "Needs review",
+  "Рекомендация по последней попытке": "Recommendation for the latest attempt",
+  "Оценка темы копится по всем попыткам: 40 % прежней оценки и 60 % последнего теста. Ниже": "A topic score builds up over attempts: 40% of the previous score and 60% of the latest test. Below",
+  "Не пройден тест": "Test not taken",
+  "Закрыт": "Locked",
+  "порог": "threshold",
+  "Моя готовность": "My readiness",
+  "Пока нет курсов с адаптивным обучением": "No adaptive courses yet",
+  "Лучший результат": "Best result",
+  "Модулей пройдено": "Modules passed",
+  "Слабых тем": "Weak topics",
+  "Готовность появится после итогового теста модуля в адаптивном курсе.": "Readiness appears after the final module test in an adaptive course."
 }

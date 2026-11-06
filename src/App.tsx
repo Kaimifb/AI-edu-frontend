@@ -9,6 +9,7 @@ import { ErrorState, Loading } from './components/ui'
 import { useI18n } from './i18n'
 
 const UsersPage = lazy(() => import('./admin/UsersPage').then(module => ({ default: module.UsersPage })))
+const ReadinessPage = lazy(() => import('./ReadinessPage').then(module => ({ default: module.ReadinessPage })))
 const AnalyticsPage = lazy(() => import('./admin/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })))
 const UserDetailPage = lazy(() => import('./admin/UserDetailPage').then(module => ({ default: module.UserDetailPage })))
 const AdminProfilePage = lazy(() => import('./admin/AdminProfilePage').then(module => ({ default: module.AdminProfilePage })))
@@ -50,6 +51,7 @@ export default function App() {
     <Route path="/verify-email/:token" element={<EmailVerificationPage key="verify" mode="verify"/>}/>
     <Route path="/resend-verification" element={<EmailVerificationPage key="resend" mode="resend"/>}/>
     <Route path="/" element={<ProtectedPage user={user}>{user?.role === 'ADMIN' ? <Navigate to="/admin/curriculum" replace/> : <MyLearningPage user={user!}/>}</ProtectedPage>}/>
+    <Route path="/progress" element={<ProtectedPage user={user}>{user?.role === 'ADMIN' ? <Navigate to="/admin/analytics" replace/> : <ReadinessPage/>}</ProtectedPage>}/>
     <Route path="/catalog" element={<ProtectedPage user={user}><CatalogPage/></ProtectedPage>}/>
     <Route path="/courses/:slug" element={<ProtectedPage user={user}><CoursePage/></ProtectedPage>}/>
     <Route path="/lessons/:id" element={user ? <LessonPage/> : <Navigate to="/login" replace/>}/>
