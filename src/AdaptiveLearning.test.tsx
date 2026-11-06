@@ -46,6 +46,15 @@ describe('adaptive learning', () => {
     expect(screen.getByText(/Начните модуль заново/)).toBeTruthy()
   })
 
+  it('links the materials to review for each weak topic', () => {
+    mount(<AdaptiveResultCard result={{ ...result, recommendation: { status: 'repeat', action: 'repeat_module', level: 'repeat', gap: -29,
+      weakest_indicator: 'competency', weak_topic_limit: .6, weak_topics: [{ competency: 'корреляция', title: 'Корреляция', score: 0, correct: 0, total: 2 }],
+      review: [{ competency: 'корреляция', title: 'Корреляция', items: [{ short_id: 'lec-3', title: 'Лекция 3', type: 'LECTURE', match: 'tag' }, { short_id: 'pr-3', title: 'Практика 3', type: 'PRACTICE', match: 'tag' }] }] } }}/>)
+    expect(screen.getByRole('listitem').textContent).toBe('Корреляция: 0% (0/2)Что повторить: Лекция 3, Практика 3')
+    expect(screen.getByRole('link', { name: 'Лекция 3' }).getAttribute('href')).toBe('/items/lec-3')
+    expect(screen.getByRole('link', { name: 'Практика 3' }).getAttribute('href')).toBe('/items/pr-3')
+  })
+
   it('keeps older attempts without a recommendation unchanged', () => {
     mount(<AdaptiveResultCard result={result}/>)
     expect(screen.queryByRole('region', { name: 'Рекомендация' })).toBeNull()

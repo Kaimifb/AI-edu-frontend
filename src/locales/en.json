@@ -1086,5 +1086,13 @@
   "не засчитана": "not accepted",
   "не пройден": "not passed",
   "пройден": "passed",
-  "Профиль студента": "Student profile"
+  "Профиль студента": "Student profile",
+  "Темы материала": "Material topics",
+  "Пишите так же, как компетенции в вопросах итогового теста. Студенту со слабой темой платформа предложит повторить этот материал.": "Spell them like the competencies of the final test questions. A student weak in a topic will be offered this material to review.",
+  "Убрать тему": "Remove topic",
+  "Новая тема": "New topic",
+  "Например, Корреляция": "For example, Correlation",
+  "Сохранить темы": "Save topics",
+  "Темы сохранены": "Topics saved",
+  "Что повторить": "Review"
 }

@@ -43,7 +43,10 @@ export function RecommendationDetails({ recommendation }: { recommendation: Reco
     {recommendation.status === 'repeat' && <p>{t('Слабее всего')}: {t(INDICATOR_LABELS[recommendation.weakest_indicator])}</p>}
     {!!topics.length && <>
       <p>{t('Повторите темы')}:</p>
-      <ul>{topics.map(topic => <li key={topic.competency}>{topic.title}: {Math.round(topic.score * 100)}% ({topic.correct}/{topic.total})</li>)}</ul>
+      <ul>{topics.map(topic => { const review = recommendation.review?.find(row => row.competency === topic.competency); return <li key={topic.competency}>
+        {topic.title}: {Math.round(topic.score * 100)}% ({topic.correct}/{topic.total})
+        {!!review?.items.length && <span className="adaptive-review">{t('Что повторить')}: {review.items.map((entry, index) => <span key={entry.short_id}>{index > 0 && ', '}<Link to={`/items/${entry.short_id}`}>{entry.title}</Link></span>)}</span>}
+      </li> })}</ul>
     </>}
     <p className="adaptive-level">{t(LEVEL_HINTS[recommendation.level])}</p>
   </section>
