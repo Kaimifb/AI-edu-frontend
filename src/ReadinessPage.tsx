@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Gauge } from 'lucide-react'
-import { api, type ReadinessCourse, type ReadinessDashboard, type ReadinessModule } from './api'
+import { api, type ActivityEvent, type ReadinessCourse, type ReadinessDashboard, type ReadinessModule } from './api'
+import { ACTIVITY_ICONS, ACTIVITY_LABELS, activityPlace, activityResult } from './activity/labels'
 import { Button, ErrorState, Loading } from './components/ui'
 import { RecommendationDetails } from './AdaptiveLearning'
 import { useI18n } from './i18n'
@@ -75,6 +76,21 @@ function CourseReadiness({ course }: { course: ReadinessCourse }) {
   </section>
 }
 
+function RecentActivity() {
+  const { t } = useI18n()
+  const feed = useQuery({ queryKey: ['my-activity'], queryFn: () => api<ActivityEvent[]>('me/activity/'), staleTime: 30000 })
+  if (!feed.data?.length) return null
+  return <section className="readiness-activity card" aria-labelledby="readiness-activity-title">
+    <h2 id="readiness-activity-title">{t('Последние действия')}</h2>
+    <ol>{feed.data.map(event => { const Icon = ACTIVITY_ICONS[event.type]; const result = activityResult(event, t); return <li key={event.id}>
+      <Icon size={16} aria-hidden="true"/>
+      <div><strong>{t(ACTIVITY_LABELS[event.type])}</strong>{event.item_short_id ? <Link to={`/items/${event.item_short_id}`}>{activityPlace(event)}</Link> : <span>{activityPlace(event)}</span>}
+        {result && <span className="readiness-activity-result">{result}</span>}</div>
+      <time dateTime={event.created_at}>{new Date(event.created_at).toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' })}</time>
+    </li> })}</ol>
+  </section>
+}
+
 export function ReadinessPage() {
   const { t } = useI18n()
   const query = useQuery({ queryKey: ['my-readiness'], queryFn: () => api<ReadinessDashboard>('me/readiness/'), staleTime: 30000 })
@@ -87,5 +103,6 @@ export function ReadinessPage() {
     {courses.length ? courses.map(course => <CourseReadiness key={course.id} course={course}/>)
       : <section className="empty-state"><Gauge size={28}/><h2>{t('Пока нет курсов с адаптивным обучением')}</h2>
         <p>{t('Готовность появится после итогового теста модуля в адаптивном курсе.')}</p><Link className="button primary" to="/">{t('Моё обучение')}</Link></section>}
+    <RecentActivity/>
   </>
 }

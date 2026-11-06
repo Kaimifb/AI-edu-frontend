@@ -43,6 +43,16 @@ it('shows readiness against the threshold, attempt history and weak competencies
   expect(within(profile).getByText('Pandas').closest('li')?.className).toBe('')
 })
 
+it('shows the latest actions of the student', async () => {
+  mockedApi.mockImplementation(async (path: string) => (path === 'me/activity/' ? [{ id: 5, type: 'PRACTICE_SUBMITTED', created_at: '2026-11-06T10:00:00Z',
+    course: 1, course_title: 'ИАД', module_title: 'Модуль 1', item_short_id: 'pr-1', item_title: 'Практическая 1', data: { score: 1, completed: true } }] : dashboard) as never)
+  mount()
+  const feed = await screen.findByRole('region', { name: 'Последние действия' })
+  expect(within(feed).getByText('Сдача практики')).toBeTruthy()
+  expect(within(feed).getByRole('link', { name: 'ИАД · Модуль 1 · Практическая 1' }).getAttribute('href')).toBe('/items/pr-1')
+  expect(within(feed).getByText('100% · засчитана')).toBeTruthy()
+})
+
 it('explains when there are no adaptive courses yet', async () => {
   mockedApi.mockResolvedValue({ courses: [] } as never)
   mount()

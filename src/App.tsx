@@ -10,6 +10,7 @@ import { useI18n } from './i18n'
 
 const UsersPage = lazy(() => import('./admin/UsersPage').then(module => ({ default: module.UsersPage })))
 const ReadinessPage = lazy(() => import('./ReadinessPage').then(module => ({ default: module.ReadinessPage })))
+const ActivityPage = lazy(() => import('./admin/ActivityPage').then(module => ({ default: module.ActivityPage })))
 const AnalyticsPage = lazy(() => import('./admin/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })))
 const UserDetailPage = lazy(() => import('./admin/UserDetailPage').then(module => ({ default: module.UserDetailPage })))
 const AdminProfilePage = lazy(() => import('./admin/AdminProfilePage').then(module => ({ default: module.AdminProfilePage })))
@@ -60,6 +61,7 @@ export default function App() {
     <Route path="/admin" element={<ProtectedPage user={user} admin><Navigate to="/admin/curriculum" replace/></ProtectedPage>}/>
     <Route path="/admin/users" element={<ProtectedPage user={user} admin><UsersPage user={user!}/></ProtectedPage>}/>
     <Route path="/admin/analytics" element={<ProtectedPage user={user} admin><AnalyticsPage/></ProtectedPage>}/>
+    <Route path="/admin/activity" element={<ProtectedPage user={user} admin><ActivityPage/></ProtectedPage>}/>
     <Route path="/admin/users/:id" element={<ProtectedPage user={user} admin><UserDetailPage actor={user!}/></ProtectedPage>}/>
     <Route path="/admin/profile" element={<ProtectedPage user={user} admin><AdminProfilePage user={user!}/></ProtectedPage>}/>
     <Route path="/admin/curriculum" element={<ProtectedPage user={user} admin><AdminCurriculum/></ProtectedPage>}/>

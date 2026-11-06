@@ -41,3 +41,14 @@
   .readiness-competencies li { grid-template-columns: minmax(0, 1fr) 3rem; }
   .readiness-competency-bar { grid-column: 1 / -1; grid-row: 2; }
 }
+.readiness-activity { padding: 24px; display: grid; gap: 14px; }
+.readiness-activity h2 { margin: 0; font-size: 1.15rem; }
+.readiness-activity ol { list-style: none; margin: 0; padding: 0; display: grid; }
+.readiness-activity li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: .88rem; }
+.readiness-activity li:last-child { border-bottom: 0; }
+.readiness-activity li > svg { margin-top: 2px; color: var(--color-primary); }
+.readiness-activity li > div { display: grid; gap: 2px; min-width: 0; }
+.readiness-activity li a, .readiness-activity li > div > span { color: var(--color-muted); overflow-wrap: anywhere; }
+.readiness-activity-result { font-variant-numeric: tabular-nums; }
+.readiness-activity time { font-size: .75rem; color: var(--color-subtle); white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .readiness-activity { padding: 16px; } .readiness-activity li { grid-template-columns: auto minmax(0, 1fr); } .readiness-activity time { grid-column: 2; } }
