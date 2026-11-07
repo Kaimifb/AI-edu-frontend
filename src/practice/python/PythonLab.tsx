@@ -75,12 +75,12 @@ export function PythonLab({ state, busy, onStart, onSubmit }: RuntimeProps) {
           const failure = submitted ? result?.error : output && 'error' in (output.results[i] ?? {}) ? (output.results[i] as { error: string }).error : ''
           return <li key={i} className={ok === undefined ? '' : ok ? 'is-passed' : 'is-failed'}>
             {ok === undefined ? <Circle size={16}/> : ok ? <CheckCircle2 size={16}/> : <XCircle size={16}/>}
-            <span>{check.title}{!check.is_required && <small> · {t('необязательная проверка')}</small>}{failure && <small className="python-lab-check-error">{failure}</small>}</span>
+            <span>{check.title}{!check.is_required && <small> · {t('необязательная проверка')}</small>}{failure && <small className="python-lab-check-error">{t(failure)}</small>}</span>
           </li>
         })}</ul>}
       </article>
     })}
-    <Notice text={error} kind="error" onDismiss={() => setError('')}/>
+    <Notice text={t(error)} kind="error" onDismiss={() => setError('')}/>
     {submitted ? <div className="python-lab-result"><p><CheckCircle2 size={18}/>{t(state.is_completed ? 'Практическая работа завершена' : 'Обязательные проверки не пройдены')}</p>
       {state.result && <p>{t('Пройдено проверок')}: {snapshot.filter(row => row.checked).length} / {flatChecks.length} · Ψ = {Math.round(state.result.psi_value * 100)}%</p>}
       {!state.is_completed && <Button disabled={busy} onClick={() => void onStart()}>{t('Начать новую попытку')}</Button>}</div>
