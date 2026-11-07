@@ -43,7 +43,7 @@ describe('adaptive learning', () => {
     expect(screen.getByText('До порога не хватило 29 п.')).toBeTruthy()
     expect(screen.getByText(/Слабее всего/).textContent).toBe('Слабее всего: Компетенции')
     expect(screen.getByRole('listitem').textContent).toBe('Визуализация: 0% (0/2)')
-    expect(screen.getByText(/Начните модуль заново/)).toBeTruthy()
+    expect(screen.getByText(/пройдите модуль заново целиком/)).toBeTruthy()
   })
 
   it('links the materials to review for each weak topic', () => {
@@ -53,6 +53,18 @@ describe('adaptive learning', () => {
     expect(screen.getByRole('listitem').textContent).toBe('Корреляция: 0% (0/2)Что повторить: Лекция 3, Практика 3')
     expect(screen.getByRole('link', { name: 'Лекция 3' }).getAttribute('href')).toBe('/items/lec-3')
     expect(screen.getByRole('link', { name: 'Практика 3' }).getAttribute('href')).toBe('/items/pr-3')
+  })
+
+  it('sends a near miss to review only the materials of its weak topics', () => {
+    mount(<AdaptiveResultCard result={{ ...result, readiness: 52, repeat_item_short_id: 'lec-3', recommendation: { status: 'repeat', action: 'repeat_module', level: 'extra_practice', gap: -8,
+      weakest_indicator: 'competency', weak_topic_limit: .6, weak_topics: [{ competency: 'корреляция', title: 'Корреляция', score: .25, correct: 1, total: 4 }],
+      review: [{ competency: 'корреляция', title: 'Корреляция', items: [{ short_id: 'lec-3', title: 'Лекция 3', type: 'LECTURE', match: 'tag' }] }],
+      route: { scope: 'topics', items: [{ short_id: 'lec-3', title: 'Лекция 3', type: 'LECTURE' }] } } }}/>)
+    expect(screen.getByText(/только материалы по слабым темам: 1/)).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Повторите слабые темы' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Начать повторение' }).getAttribute('href')).toBe('/items/lec-3')
+    expect(screen.queryByRole('link', { name: 'Повторить модуль' })).toBeNull()
+    expect(screen.getByText(/Повторите отмеченные материалы/)).toBeTruthy()
   })
 
   it('keeps older attempts without a recommendation unchanged', () => {
@@ -66,7 +78,7 @@ describe('adaptive learning', () => {
     expect(screen.getByText('Готовность выше порога на 17 п.')).toBeTruthy()
     expect(screen.queryByText(/Слабее всего/)).toBeNull()
     expect(screen.queryByText(/Повторите темы/)).toBeNull()
-    expect(screen.getByText(/задания повышенной сложности/)).toBeTruthy()
+    expect(screen.getByText(/модуль освоен с большим запасом/)).toBeTruthy()
   })
 
   it('keeps locked items visible without a clickable link', () => {

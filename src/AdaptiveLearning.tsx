@@ -10,24 +10,25 @@ export function LearningItemLink({ item, locked = item.is_locked, children }: { 
 
 export function AdaptiveResultCard({ result, showNext = true }: { result: AdaptiveResult; showNext?: boolean }) {
   const { t } = useI18n()
+  const topicRoute = result.recommendation?.route?.scope === 'topics'
   return <div className={`result-card ${result.module_completed ? 'passed' : 'failed'}`}>
-    <h3>{t(result.module_completed ? 'Модуль освоен' : 'Повторите модуль')}</h3>
+    <h3>{t(result.module_completed ? 'Модуль освоен' : topicRoute ? 'Повторите слабые темы' : 'Повторите модуль')}</h3>
     <strong>{result.readiness}%</strong><p>{t('Готовность')} · {t('Порог')} {result.threshold}%</p>
     <div className="adaptive-indicators">{([
       ['Теория', result.theory], ['Практика', result.practice], ['Ошибки', result.errors], ['Компетенции', result.competency],
     ] as const).map(([label, value]) => <span key={label}>{t(label)}: {Math.round(value * 100)}%</span>)}</div>
-    <p>{t(result.module_completed ? 'Можно продолжить обучение.' : 'Пройдите материалы и практику ещё раз, затем повторите итоговый тест.')}</p>
+    <p>{t(result.module_completed ? 'Можно продолжить обучение.' : topicRoute ? 'Повторите отмеченные материалы, затем снова пройдите итоговый тест.' : 'Пройдите материалы и практику ещё раз, затем повторите итоговый тест.')}</p>
     {result.recommendation && <RecommendationDetails recommendation={result.recommendation}/>}
-    {result.module_completed ? result.next_item_short_id ? showNext && <Link className="button" to={`/items/${result.next_item_short_id}`}>{t('Следующий модуль')}</Link> : <p>{t('Все опубликованные модули курса пройдены.')}</p> : <Link className="button" to={`/items/${result.repeat_item_short_id}`}>{t('Повторить модуль')}</Link>}
+    {result.module_completed ? result.next_item_short_id ? showNext && <Link className="button" to={`/items/${result.next_item_short_id}`}>{t('Следующий модуль')}</Link> : <p>{t('Все опубликованные модули курса пройдены. Если для курса включён сертификат, его можно получить на странице курса.')}</p> : <Link className="button" to={`/items/${result.repeat_item_short_id}`}>{t(topicRoute ? 'Начать повторение' : 'Повторить модуль')}</Link>}
   </div>
 }
 
 const INDICATOR_LABELS = { theory: 'Теория', practice: 'Практика', competency: 'Компетенции' } as const
 const LEVEL_HINTS = {
-  repeat: 'Начните модуль заново: изучите лекции и практические с начала.',
-  extra_practice: 'Вы близко к порогу: перед новой попыткой потренируйтесь на слабых темах.',
-  next: 'Можно переходить к следующему модулю.',
-  advanced: 'Отличный результат: попробуйте задания повышенной сложности.',
+  repeat: 'Результат далеко от порога: пройдите модуль заново целиком.',
+  extra_practice: 'Вы близко к порогу: повторите материалы по слабым темам и пройдите тест снова.',
+  next: 'Модуль освоен.',
+  advanced: 'Отличный результат: модуль освоен с большим запасом.',
 } as const
 
 function points(value: number) {
@@ -49,6 +50,8 @@ export function RecommendationDetails({ recommendation }: { recommendation: Reco
       </li> })}</ul>
     </>}
     <p className="adaptive-level">{t(LEVEL_HINTS[recommendation.level])}</p>
+    {recommendation.route?.scope === 'topics' && !!recommendation.route.items.length &&
+      <p className="adaptive-route">{t('Заново откроются только материалы по слабым темам')}: {recommendation.route.items.length}. {t('Остальное засчитано.')}</p>}
   </section>
 }
 
